@@ -1,0 +1,248 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import "./Timetable.css";
+
+const days = [
+  "MONDAY",
+  "TUESDAY",
+  "WEDNESDAY",
+  "THURSDAY",
+  "FRIDAY",
+  "SATURDAY",
+];
+
+const periods = [1,2,3,4,5,6,7,8];
+
+const formatAcademicYearLabel = (year, years) => {
+  const today = new Date();
+  const start = new Date(year.academicYearStart);
+  const end = new Date(year.academicYearEnd);
+
+  if (today >= start && today <= end) {
+    return "Current Academic Year";
+  }
+
+  const hasCurrentAcademicYear = years.some((item) => {
+    const itemStart = new Date(item.academicYearStart);
+    const itemEnd = new Date(item.academicYearEnd);
+    return today >= itemStart && today <= itemEnd;
+  });
+
+  if (!hasCurrentAcademicYear && years.length > 0) {
+    const latestYear = [...years].sort((a, b) =>
+      new Date(b.academicYearStart) - new Date(a.academicYearStart)
+    )[0];
+
+    if (
+      latestYear.academicYearStart === year.academicYearStart &&
+      latestYear.academicYearEnd === year.academicYearEnd
+    ) {
+      return "Current Academic Year";
+    }
+  }
+
+  return `${year.academicYearStart} to ${year.academicYearEnd}`;
+};
+
+const ClassTimetable = () => {
+  const [schoolId, setSchoolId] = useState(localStorage.getItem("schoolId") || 1);
+  const [classRoomId, setClassRoomId] = useState(2);
+  const [academicYears, setAcademicYears] = useState([]);
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState("");
+  const [data, setData] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchAcademicYears = async () => {
+      try {
+        setError("");
+        const res = await axios.get(
+          "http://localhost:8080/scheduler/api/admin/timetable/years",
+          {
+            params: { schoolId },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        const years = Array.isArray(res.data) ? res.data : [];
+        setAcademicYears(years);
+
+        if (years.length > 0) {
+          const defaultValue = `${years[0].academicYearStart}|${years[0].academicYearEnd}`;
+          setSelectedAcademicYear((currentValue) => currentValue || defaultValue);
+        } else {
+          setSelectedAcademicYear("");
+        }
+      } catch (err) {
+        setAcademicYears([]);
+        setSelectedAcademicYear("");
+        setError("Failed to load academic years");
+      }
+    };
+
+    if (schoolId) {
+      fetchAcademicYears();
+    }
+  }, [schoolId]);
+
+  const fetchTimetable = async () => {
+    if (!selectedAcademicYear) {
+      setError("Select an academic year");
+      return;
+    }
+
+    const [academicYearStart, academicYearEnd] = selectedAcademicYear.split("|");
+    const res = await axios.get(
+      "http://localhost:8080/scheduler/api/admin/timetable/class",
+      {
+        params: { schoolId, classRoomId, academicYearStart, academicYearEnd },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    setData(res.data);
+    setError("");
+  };
+
+  const getCell = (day, period) =>
+    data.find(
+      (d) => d.dayOfWeek === day && d.periodNumber === period
+    );
+
+  return (
+    <section className="timetable-card timetable-card--wide">
+      <div className="timetable-card__header">
+        <div>
+          <p className="timetable-eyebrow">Operational View</p>
+          <h2>Class Timetable</h2>
+          <p className="timetable-subtitle">
+            Review the full weekly schedule by class, subject, and assigned tutor.
+          </p>
+        </div>
+      </div>
+
+      <div className="timetable-form-grid timetable-form-grid--compact">
+        <div className="timetable-field">
+          <label>School ID</label>
+          <input
+            type="number"
+            placeholder="School ID"
+            value={schoolId}
+            onChange={(e) => setSchoolId(e.target.value)}
+          />
+        </div>
+        <div className="timetable-field">
+          <label>Class ID</label>
+          <input
+            type="number"
+            placeholder="Class ID"
+            value={classRoomId}
+            onChange={(e) => setClassRoomId(e.target.value)}
+          />
+        </div>
+        <div className="timetable-field">
+          <label>Academic Year</label>
+          <select
+            value={selectedAcademicYear}
+            onChange={(e) => setSelectedAcademicYear(e.target.value)}
+          >
+            <option value="">Select Academic Year</option>
+            {academicYears.map((year) => {
+              const value = `${year.academicYearStart}|${year.academicYearEnd}`;
+              return (
+                <option key={value} value={value}>
+                  {formatAcademicYearLabel(year, academicYears)}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div className="timetable-action">
+          <button className="timetable-button timetable-button--primary" onClick={fetchTimetable}>
+            Fetch Timetable
+          </button>
+        </div>
+      </div>
+
+      {error ? <p className="timetable-feedback is-error">{error}</p> : null}
+
+      <div className="timetable-shell">
+        <div className="timetable-shell__meta">
+          <div>
+            <span className="meta-label">Displayed Days</span>
+            <strong>{days.length}</strong>
+          </div>
+          <div>
+            <span className="meta-label">Periods Per Day</span>
+            <strong>{periods.length}</strong>
+          </div>
+          <div>
+            <span className="meta-label">Academic Year</span>
+            <strong>
+              {selectedAcademicYear
+                ? academicYears.find(
+                    (year) =>
+                      `${year.academicYearStart}|${year.academicYearEnd}` === selectedAcademicYear
+                  )
+                  ? formatAcademicYearLabel(
+                      academicYears.find(
+                        (year) =>
+                          `${year.academicYearStart}|${year.academicYearEnd}` === selectedAcademicYear
+                      ),
+                      academicYears
+                    )
+                  : "Not selected"
+                : "Not selected"}
+            </strong>
+          </div>
+        </div>
+
+        <div className="timetable-table-wrap">
+          <table className="timetable">
+            <thead>
+              <tr>
+                <th>Day / Period</th>
+                {periods.map((p) => (
+                  <th key={p}>P{p}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {days.map((day) => (
+                <tr key={day}>
+                  <td className="timetable-day"><b>{day}</b></td>
+                  {periods.map((p) => {
+                    const cell = getCell(day, p);
+                    const cellClass = !cell?.active || cell?.status === "CONFLICT"
+                      ? "timetable-cell is-inactive"
+                      : cell
+                        ? "timetable-cell is-filled"
+                        : "timetable-cell is-empty";
+
+                    return (
+                      <td key={p} className={cellClass}>
+                        {cell ? (
+                          <div className="timetable-entry">
+                            <span className="entry-subject">{cell.subjectName ?? "—"}</span>
+                            <span className="entry-tutor">{cell.tutorId ?? "—"}</span>
+                          </div>
+                        ) : (
+                          <span className="entry-empty">—</span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default ClassTimetable;

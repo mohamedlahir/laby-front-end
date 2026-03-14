@@ -1,0 +1,257 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Parisienne&display=swap");
+
+.login-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.14), transparent 24%),
+    linear-gradient(135deg, #eef4ff 0%, #f8fbff 48%, #f3f8f6 100%);
+}
+
+.login-backdrop-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+.login-backdrop-orb--one {
+  top: 8%;
+  right: -8%;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.18), rgba(37, 99, 235, 0));
+}
+
+.login-backdrop-orb--two {
+  bottom: -12%;
+  left: -6%;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.14), rgba(14, 165, 233, 0));
+}
+
+.login-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) minmax(420px, 520px);
+  align-items: center;
+  gap: 48px;
+  min-height: 100vh;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 48px;
+}
+
+.login-brand-panel {
+  padding: 36px 28px;
+}
+
+.login-kicker {
+  margin-bottom: 12px;
+}
+
+.login-brand-script {
+  display: inline-block;
+  color: #1d4ed8;
+  font-family: "Parisienne", cursive;
+  font-size: clamp(2.8rem, 4vw, 4rem);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-shadow: 0 10px 24px rgba(37, 99, 235, 0.14);
+}
+
+.login-title {
+  max-width: 640px;
+  margin: 0 0 20px;
+  color: #0f172a;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: clamp(2.7rem, 4.8vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.login-copy {
+  max-width: 640px;
+  margin: 0;
+  color: #475569;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 1.12rem;
+  line-height: 1.75;
+}
+
+.login-brand-inline {
+  color: #1d4ed8;
+  font-family: "Parisienne", cursive;
+  font-size: 1.4em;
+  vertical-align: middle;
+}
+
+.login-feature-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.login-feature-pill {
+  padding: 12px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+  color: #0f172a;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.98rem;
+  font-weight: 700;
+  backdrop-filter: blur(12px);
+}
+
+.login-form-panel {
+  position: relative;
+}
+
+.login-form-panel > div {
+  background: transparent;
+}
+
+.login-form-panel .MuiContainer-root,
+.login-form-panel .MuiBox-root {
+  max-width: none;
+}
+
+.login-form-panel .MuiCard-root {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.14);
+  backdrop-filter: blur(18px);
+}
+
+.login-form-panel .MuiCardContent-root,
+.login-form-panel .MuiBox-root:has(form) {
+  padding: 32px;
+}
+
+.login-form-panel h1,
+.login-form-panel h2,
+.login-form-panel .MuiTypography-h5,
+.login-form-panel .MuiTypography-h4 {
+  color: #0f172a;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.login-form-panel .MuiTypography-body1,
+.login-form-panel .MuiTypography-body2 {
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  color: #64748b;
+}
+
+.login-form-panel .MuiTextField-root {
+  margin-bottom: 10px;
+}
+
+.login-form-panel .MuiOutlinedInput-root {
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.login-form-panel .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(148, 163, 184, 0.45);
+}
+
+.login-form-panel .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(37, 99, 235, 0.45);
+}
+
+.login-form-panel .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-width: 2px;
+  border-color: #2563eb;
+}
+
+.login-form-panel .MuiButton-root {
+  min-height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  box-shadow: 0 18px 30px rgba(37, 99, 235, 0.28);
+  color: #ffffff;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.login-form-panel .MuiButton-root:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+}
+
+@media (max-width: 1100px) {
+  .login-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 32px 20px;
+  }
+
+  .login-brand-panel {
+    padding: 16px 8px 0;
+    text-align: center;
+  }
+
+  .login-title,
+  .login-copy {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .login-feature-list {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .login-shell {
+    background:
+      radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 24%),
+      linear-gradient(180deg, #eff5ff 0%, #f8fbff 100%);
+  }
+
+  .login-grid {
+    padding: 20px 16px 28px;
+  }
+
+  .login-brand-panel {
+    padding: 8px 0 0;
+  }
+
+  .login-kicker {
+    margin-bottom: 12px;
+    font-size: 11px;
+  }
+
+  .login-copy {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .login-feature-list {
+    gap: 10px;
+  }
+
+  .login-feature-pill {
+    font-size: 0.9rem;
+  }
+
+  .login-form-panel .MuiCard-root {
+    border-radius: 22px;
+  }
+}
