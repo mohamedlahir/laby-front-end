@@ -6,8 +6,8 @@ import Button from "@mui/material/Button";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import { createTheme, useColorScheme } from "@mui/material/styles";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+// import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+// import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 
