@@ -9,6 +9,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 // import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 // import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 
 import { AppProvider } from "@toolpad/core/AppProvider";
@@ -22,6 +23,8 @@ import UserDetailsPage from "../UserDetailsPage";
 import Dashboard from "../Dashboard";
 import PrincipalDashboard from "../PrincipalDashboard";
 import TutorTimetable from "../TutorTimetable";
+import ApplyLeave from "../Tutor Management/ApplyLeave";
+import TutorDashboard from "../../../Teachers/TutorDashboard";
 import GenerateTimetable from "../TimeTable Generation/GenerateTimetable";
 import ClassTimetable from "../TimeTable Generation/ClassTimetable";
 
@@ -30,6 +33,7 @@ import ClassTimetable from "../TimeTable Generation/ClassTimetable";
 const NAVIGATION = [
   { segment: "dashboard", title: "Dashboard", icon: <DashboardIcon /> },
   { segment: "tutor-timetable", title: "Tutor Timetable", icon: <EventNoteIcon /> },
+  { segment: "tutor-management", title: "Tutor Management", icon: <ManageAccountsIcon /> },
   {
     segment: "timetable",
     title: "Time Table Generation",
@@ -240,6 +244,11 @@ function DemoPageContent({ pathname, isDarkMode }) {
     if (userRole === "ADMIN") {
       return <PrincipalDashboard />;
     }
+
+    if (userRole === "TUTOR") {
+      return <TutorDashboard />;
+    }
+
     return <Dashboard />;
   }
 
@@ -338,6 +347,12 @@ function DemoPageContent({ pathname, isDarkMode }) {
   if (pathname === "/tutor-timetable") {
     return <TutorTimetable />;
   }
+
+  if (pathname === "/tutor-management") {
+    return <ApplyLeave />;
+  }
+
+  // fallback for dashboard route: if token role indicates TUTOR, show TutorDashboard
 
   return (
     <Box
@@ -492,6 +507,7 @@ function DashboardLayoutBranding(props) {
     "/profile": "Profile",
     "/timetable": "Time Table Generation",
     "/tutor-timetable": "Tutor Timetable",
+    "/tutor-management": "Tutor Management",
     "/orders": "Orders",
   };
   const currentTitle = pageTitleMap[router.pathname] || "Dashboard";

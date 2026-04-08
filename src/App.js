@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import CredentialsSignInPage from "./Components/Landing-Page-components/CredentialsSignInPage";
+import RegistrationPage from "./Components/Landing-Page-components/RegistrationPage";
+import PricingPage from "./Components/Landing-Page-components/PricingPage";
 import AdminDashboard from "./Components/Admin/DashboardSection/Admin Layout/AdminDashboardLayout";
 import UserHomePage from "./Components/Student/UserHomePage";
 import TutorTimetable from "./Components/Admin/DashboardSection/TutorTimetable";
@@ -55,6 +57,8 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<CredentialsSignInPage />} />
+        <Route path="/register" element={<RegistrationPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
         <Route
           path="/admin"
           element={

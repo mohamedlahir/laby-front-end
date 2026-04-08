@@ -1,0 +1,38 @@
+npm verbose cli /Users/mohamedlahir/.nvm/versions/node/v24.4.1/bin/node /Users/mohamedlahir/.nvm/versions/node/v24.4.1/bin/npm
+npm info using npm@11.4.2
+npm info using node@v24.4.1
+npm verbose title npm install
+npm verbose argv "install" "--no-audit" "--progress" "false" "--loglevel" "verbose"
+npm verbose logfile logs-max:10 dir:/Users/mohamedlahir/.npm/_logs/2026-03-26T21_36_40_614Z-
+npm verbose logfile /Users/mohamedlahir/.npm/_logs/2026-03-26T21_36_40_614Z-debug-0.log
+npm http cache yaml-diff-patch@https://registry.npmjs.org/yaml-diff-patch/-/yaml-diff-patch-2.0.0.tgz 0ms (cache hit)
+npm http cache yaml@https://registry.npmjs.org/yaml/-/yaml-2.5.1.tgz 0ms (cache hit)
+npm http cache xlsx@https://registry.npmjs.org/xlsx/-/xlsx-0.18.5.tgz 0ms (cache hit)
+npm http cache which@https://registry.npmjs.org/which/-/which-2.0.2.tgz 0ms (cache hit)
+npm http cache title@https://registry.npmjs.org/title/-/title-4.0.1.tgz 0ms (cache hit)
+npm http cache rimraf@https://registry.npmjs.org/rimraf/-/rimraf-3.0.2.tgz 0ms (cache hit)
+npm http cache resolve@https://registry.npmjs.org/resolve/-/resolve-1.22.11.tgz 0ms (cache hit)
+npm http cache prettier@https://registry.npmjs.org/prettier/-/prettier-3.5.3.tgz 0ms (cache hit)
+npm http cache nanoid@https://registry.npmjs.org/nanoid/-/nanoid-3.3.11.tgz 0ms (cache hit)
+npm http cache jsesc@https://registry.npmjs.org/jsesc/-/jsesc-3.1.0.tgz 0ms (cache hit)
+npm http cache lz-string@https://registry.npmjs.org/lz-string/-/lz-string-1.5.0.tgz 0ms (cache hit)
+npm http cache jake@https://registry.npmjs.org/jake/-/jake-10.9.4.tgz 0ms (cache hit)
+npm http cache loose-envify@https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz 1ms (cache hit)
+npm http cache crc-32@https://registry.npmjs.org/crc-32/-/crc-32-1.2.2.tgz 0ms (cache hit)
+npm http cache is-inside-container@https://registry.npmjs.org/is-inside-container/-/is-inside-container-1.0.0.tgz 0ms (cache hit)
+npm http cache is-docker@https://registry.npmjs.org/is-docker/-/is-docker-2.2.1.tgz 0ms (cache hit)
+npm http cache css-blank-pseudo@https://registry.npmjs.org/css-blank-pseudo/-/css-blank-pseudo-3.0.3.tgz 0ms (cache hit)
+npm http cache browserslist@https://registry.npmjs.org/browserslist/-/browserslist-4.28.1.tgz 0ms (cache hit)
+npm http cache baseline-browser-mapping@https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.10.10.tgz 0ms (cache hit)
+npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+
+changed 19 packages in 2s
+
+297 packages are looking for funding
+  run `npm fund` for details
+npm verbose cwd /Users/mohamedlahir/Desktop/practise/React/Laby/laby
+npm verbose os Darwin 25.0.0
+npm verbose node v24.4.1
+npm verbose npm  v11.4.2
+npm verbose exit 0
+npm info ok

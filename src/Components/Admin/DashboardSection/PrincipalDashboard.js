@@ -24,7 +24,7 @@ import {
 } from "@mui/material";
 import { useColorScheme } from "@mui/material/styles";
 
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8080";
+import { API_BASE } from "../../../config/api";
 
 function formatNumber(value) {
   if (value === null || value === undefined) return "—";
@@ -71,7 +71,7 @@ export default function PrincipalDashboard() {
       return null;
     }
 
-    const yearsUrl = new URL(`${API_BASE}/scheduler/api/admin/timetable/years`);
+  const yearsUrl = new URL(`${API_BASE}/scheduler/admin/timetable/years`);
     yearsUrl.searchParams.set("schoolId", schoolId);
 
     const yearsResponse = await fetch(yearsUrl.toString(), {
@@ -136,7 +136,7 @@ export default function PrincipalDashboard() {
 
       const [summaryResponse, teachersResponse] = await Promise.all([
         fetch(
-          `${API_BASE}/scheduler/api/principal/dashboard/summary?${params.toString()}`,
+          `${API_BASE}/scheduler/principal/dashboard/summary?${params.toString()}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -145,7 +145,7 @@ export default function PrincipalDashboard() {
           }
         ),
         fetch(
-          `${API_BASE}/scheduler/api/principal/dashboard/teachers?${params.toString()}`,
+          `${API_BASE}/scheduler/principal/dashboard/teachers?${params.toString()}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -309,6 +309,12 @@
   background: linear-gradient(180deg, #fff7ed, #ffedd5);
 }
 
+/* Replaced slots (substitute assigned) - highlight in orange */
+.timetable-cell.is-replaced {
+  background: linear-gradient(180deg, #fff7e6, #ffd8a8);
+  border-left: 4px solid rgba(249, 115, 22, 0.14);
+}
+
 .timetable-entry {
   display: flex;
   flex-direction: column;
@@ -343,6 +349,12 @@
   color: #92400e;
   font-size: 14px;
   font-weight: 800;
+}
+
+.entry-note {
+  color: #b45309; /* amber-700 */
+  font-size: 12px;
+  font-weight: 700;
 }
 
 [data-toolpad-color-scheme="dark"] .timetable-card {
@@ -471,6 +483,12 @@
 
 [data-toolpad-color-scheme="dark"] .timetable-cell.is-empty {
   background: linear-gradient(180deg, rgba(120, 53, 15, 0.24), rgba(67, 20, 7, 0.28));
+}
+
+/* Dark theme: replaced slots use a warm orange tint */
+[data-toolpad-color-scheme="dark"] .timetable-cell.is-replaced {
+  background: linear-gradient(180deg, rgba(255, 159, 67, 0.12), rgba(255, 115, 24, 0.16));
+  border-left: 4px solid rgba(249, 115, 22, 0.22);
 }
 
 [data-toolpad-color-scheme="dark"] .entry-subject {

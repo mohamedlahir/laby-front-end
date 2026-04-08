@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./Timetable.css";
+import { API_BASE } from "../../../../config/api";
 
 const days = [
   "MONDAY",
   "TUESDAY",
   "WEDNESDAY",
   "THURSDAY",
-  "FRIDAY",
-  "SATURDAY",
+  "FRIDAY"
+  // "SATURDAY",
 ];
 
-const periods = [1,2,3,4,5,6,7,8];
+const periods = [1,2,3,4,5,6,7,8,9];
 
 const formatAcademicYearLabel = (year, years) => {
   const today = new Date();
@@ -49,6 +50,7 @@ const ClassTimetable = () => {
   const [classRoomId, setClassRoomId] = useState(2);
   const [academicYears, setAcademicYears] = useState([]);
   const [selectedAcademicYear, setSelectedAcademicYear] = useState("");
+  const [targetDate, setTargetDate] = useState("");
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
 
@@ -56,15 +58,12 @@ const ClassTimetable = () => {
     const fetchAcademicYears = async () => {
       try {
         setError("");
-        const res = await axios.get(
-          "http://localhost:8080/scheduler/api/admin/timetable/years",
-          {
-            params: { schoolId },
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+  const res = await axios.get(`${API_BASE}/scheduler/admin/timetable/years`, {
+          params: { schoolId },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
 
         const years = Array.isArray(res.data) ? res.data : [];
         setAcademicYears(years);
@@ -94,15 +93,15 @@ const ClassTimetable = () => {
     }
 
     const [academicYearStart, academicYearEnd] = selectedAcademicYear.split("|");
-    const res = await axios.get(
-      "http://localhost:8080/scheduler/api/admin/timetable/class",
-      {
-        params: { schoolId, classRoomId, academicYearStart, academicYearEnd },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
+    const params = { schoolId, classRoomId, academicYearStart, academicYearEnd };
+    if (targetDate) params.targetDate = targetDate;
+
+  const res = await axios.get(`${API_BASE}/scheduler/admin/timetable/class`, {
+      params,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
     setData(res.data);
     setError("");
   };
@@ -160,6 +159,14 @@ const ClassTimetable = () => {
             })}
           </select>
         </div>
+        <div className="timetable-field">
+          <label>Target Date</label>
+          <input
+            type="date"
+            value={targetDate}
+            onChange={(e) => setTargetDate(e.target.value)}
+          />
+        </div>
         <div className="timetable-action">
           <button className="timetable-button timetable-button--primary" onClick={fetchTimetable}>
             Fetch Timetable
@@ -214,21 +221,34 @@ const ClassTimetable = () => {
               {days.map((day) => (
                 <tr key={day}>
                   <td className="timetable-day"><b>{day}</b></td>
-                  {periods.map((p) => {
+                    {periods.map((p) => {
                     const cell = getCell(day, p);
-                    const cellClass = !cell?.active || cell?.status === "CONFLICT"
-                      ? "timetable-cell is-inactive"
-                      : cell
-                        ? "timetable-cell is-filled"
-                        : "timetable-cell is-empty";
+                    let cellClass = "timetable-cell is-empty";
+
+                    // Treat CONFLICT with NO_TUTOR_AVAILABLE specially: keep neutral styling but show a note
+                    if (!cell?.active || (cell?.status === "CONFLICT" && cell?.conflictReason !== "NO_TUTOR_AVAILABLE")) {
+                      cellClass = "timetable-cell is-inactive";
+                    } else if (cell?.status === "REPLACED") {
+                      cellClass = "timetable-cell is-replaced";
+                    } else if (cell) {
+                      cellClass = "timetable-cell is-filled";
+                    }
 
                     return (
                       <td key={p} className={cellClass}>
                         {cell ? (
-                          <div className="timetable-entry">
-                            <span className="entry-subject">{cell.subjectName ?? "—"}</span>
-                            <span className="entry-tutor">{cell.tutorId ?? "—"}</span>
-                          </div>
+                          // If there's a NO_TUTOR_AVAILABLE conflict, show a note but keep neutral styling
+                          cell.status === "CONFLICT" && cell.conflictReason === "NO_TUTOR_AVAILABLE" ? (
+                            <div className="timetable-entry">
+                              <span className="entry-subject">{cell.subjectName ?? "—"}</span>
+                              <span className="entry-note">No tutor available</span>
+                            </div>
+                          ) : (
+                            <div className="timetable-entry">
+                              <span className="entry-subject">{cell.subjectName ?? "—"}</span>
+                              <span className="entry-tutor">{cell.tutorId ?? "—"}</span>
+                            </div>
+                          )
                         ) : (
                           <span className="entry-empty">—</span>
                         )}
