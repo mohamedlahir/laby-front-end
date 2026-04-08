@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import axios from "axios";
+import { API_BASE } from "../../../config/api";
 import "./TimeTable Generation/Timetable.css";
 
 const days = [
@@ -17,29 +18,28 @@ const formatDay = (day) => day.charAt(0) + day.slice(1).toLowerCase();
 
 const TutorTimetable = () => {
   const [tutorId, setTutorId] = useState("");
-  const [weeklyTimetableId, setWeeklyTimetableId] = useState(42);
+  // accept academic year range instead of weeklyTimetableId
+  const [academicYearStart, setAcademicYearStart] = useState("2026-06-01");
+  const [academicYearEnd, setAcademicYearEnd] = useState("2027-03-31");
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
   const [hasFetched, setHasFetched] = useState(false);
 
   const fetchTimetable = async () => {
-    if (!tutorId || !weeklyTimetableId) {
-      setError("Tutor ID and Weekly Timetable ID are required.");
+    if (!tutorId || !academicYearStart || !academicYearEnd) {
+      setError("Tutor ID and academic year start/end are required.");
       return;
     }
 
     try {
       setError("");
       setHasFetched(true);
-      const res = await axios.get(
-        "http://localhost:8080/scheduler/api/tutor/timetable",
-        {
-          params: { tutorId, weeklyTimetableId },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const res = await axios.get(`${API_BASE}/scheduler/tutor/timetable`, {
+        params: { tutorId, academicYearStart, academicYearEnd },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       setData(res.data || []);
     } catch (fetchError) {
       setData([]);
@@ -98,13 +98,22 @@ const TutorTimetable = () => {
         </div>
 
         <div className="timetable-field">
-          <label htmlFor="weekly-timetable-id">Weekly Timetable ID</label>
+          <label htmlFor="academic-year-start">Academic Year Start</label>
           <input
-            id="weekly-timetable-id"
-            type="number"
-            placeholder="Weekly Timetable ID"
-            value={weeklyTimetableId}
-            onChange={(e) => setWeeklyTimetableId(e.target.value)}
+            id="academic-year-start"
+            type="date"
+            value={academicYearStart}
+            onChange={(e) => setAcademicYearStart(e.target.value)}
+          />
+        </div>
+
+        <div className="timetable-field">
+          <label htmlFor="academic-year-end">Academic Year End</label>
+          <input
+            id="academic-year-end"
+            type="date"
+            value={academicYearEnd}
+            onChange={(e) => setAcademicYearEnd(e.target.value)}
           />
         </div>
 
@@ -152,12 +161,12 @@ const TutorTimetable = () => {
 
         {!hasFetched ? (
           <div className="timetable-empty-state">
-            <p className="timetable-empty-state__title">No tutor timetable loaded yet</p>
-            <p className="timetable-empty-state__copy">
-              Enter a tutor ID and weekly timetable ID above, then fetch the schedule to
-              populate the period grid.
-            </p>
-          </div>
+              <p className="timetable-empty-state__title">No tutor timetable loaded yet</p>
+              <p className="timetable-empty-state__copy">
+                Enter a tutor ID and an academic year start/end above, then fetch the
+                schedule to populate the period grid.
+              </p>
+            </div>
         ) : (
           <div className="timetable-table-wrap">
             <table className="timetable">

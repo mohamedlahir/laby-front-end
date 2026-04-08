@@ -31,6 +31,7 @@ import {
   Container, Button,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { API_BASE } from "../../../config/api";
 
 export default function Profile() {
   const theme = useTheme();
@@ -50,7 +51,7 @@ export default function Profile() {
       }
 
       try {
-        const response = await fetch("http://localhost:8080/users/getuser", {
+  const response = await fetch(`${API_BASE}/users/getuser`, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

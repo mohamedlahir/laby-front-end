@@ -35,6 +35,7 @@ import {
 } from "@mui/icons-material";
 
 import * as XLSX from "xlsx";
+import { API_BASE } from "../../../config/api";
 
 export default function AdminDashboard() {
   const [users, setUsers] = useState([]);
@@ -80,7 +81,7 @@ export default function AdminDashboard() {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/users/getuser", {
+  const response = await fetch(`${API_BASE}/users/getuser`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -182,8 +183,8 @@ export default function AdminDashboard() {
 
   const handleSubmit = async () => {
     const url = isEditing
-      ? `http://localhost:8080/users/update/${currentUser.userId}`
-      : "http://localhost:8080/auth/register";
+      ? `${API_BASE}/users/update/${currentUser.userId}`
+      : `${API_BASE}/auth/register`;
 
     const method = isEditing ? "PUT" : "POST";
     const token = localStorage.getItem("token");
@@ -238,16 +239,13 @@ export default function AdminDashboard() {
     try {
       const token = localStorage.getItem("token");
       for (const id of selectedUsers) {
-        await fetch(
-          `http://localhost:8080/users/userprofile/delete/${id}`,
-          {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        await fetch(`${API_BASE}/users/userprofile/delete/${id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
       }
 
       setSnackbar({

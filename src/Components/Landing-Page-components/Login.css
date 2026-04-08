@@ -3,11 +3,11 @@
 .login-shell {
   position: relative;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
   background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.14), transparent 24%),
-    linear-gradient(135deg, #eef4ff 0%, #f8fbff 48%, #f3f8f6 100%);
+    radial-gradient(circle at 8% 18%, rgba(59, 130, 246, 0.14), transparent 24%),
+    radial-gradient(circle at 92% 72%, rgba(125, 211, 252, 0.16), transparent 22%),
+    linear-gradient(135deg, #eef4ff 0%, #fbfdff 52%, #edf6ff 100%);
 }
 
 .login-backdrop-orb {
@@ -33,77 +33,149 @@
   background: radial-gradient(circle, rgba(14, 165, 233, 0.14), rgba(14, 165, 233, 0));
 }
 
+.public-topbar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 22px 48px 0;
+}
+
+.public-brand {
+  text-decoration: none;
+}
+
+.public-brand__script {
+  color: #1d4ed8;
+  font-family: "Parisienne", cursive;
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.public-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.public-nav__link,
+.public-nav__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  color: #1e3a8a;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: none !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.public-nav__link:hover,
+.public-nav__button:hover {
+  transform: translateY(-1px);
+}
+
+.public-nav__link--outline {
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+}
+
+.public-nav__button {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  box-shadow: 0 16px 28px rgba(37, 99, 235, 0.22) !important;
+  color: #fff !important;
+}
+
 .login-grid {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(320px, 1fr) minmax(420px, 520px);
-  align-items: center;
-  gap: 48px;
-  min-height: 100vh;
+  gap: 52px;
   max-width: 1320px;
   margin: 0 auto;
-  padding: 48px;
+  padding: 40px 48px 56px;
+}
+
+.login-grid--auth {
+  grid-template-columns: minmax(470px, 1.1fr) minmax(420px, 0.9fr);
+  align-items: center;
+  min-height: calc(100vh - 110px);
+}
+
+.login-grid--register {
+  grid-template-columns: minmax(360px, 0.95fr) minmax(540px, 0.95fr);
+  align-items: center;
+  min-height: calc(100vh - 110px);
 }
 
 .login-brand-panel {
-  padding: 36px 28px;
+  max-width: 700px;
+  padding: 18px 8px 24px;
 }
 
 .login-kicker {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .login-brand-script {
   display: inline-block;
   color: #1d4ed8;
   font-family: "Parisienne", cursive;
-  font-size: clamp(2.8rem, 4vw, 4rem);
+  font-size: clamp(3rem, 4vw, 4.5rem);
   line-height: 1;
-  letter-spacing: 0.01em;
-  text-shadow: 0 10px 24px rgba(37, 99, 235, 0.14);
 }
 
 .login-title {
-  max-width: 640px;
-  margin: 0 0 20px;
-  color: #0f172a;
+  max-width: 740px;
+  margin: 14px 0 18px;
+  color: #102145;
   font-family: "DM Sans", "Segoe UI", sans-serif;
-  font-size: clamp(2.7rem, 4.8vw, 4.4rem);
+  font-size: clamp(3.2rem, 5vw, 5.2rem);
   font-weight: 700;
   line-height: 1.02;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.055em;
 }
 
 .login-copy {
-  max-width: 640px;
+  max-width: 650px;
   margin: 0;
   color: #475569;
   font-family: "DM Sans", "Segoe UI", sans-serif;
   font-size: 1.12rem;
-  line-height: 1.75;
+  line-height: 1.72;
 }
 
 .login-brand-inline {
   color: #1d4ed8;
   font-family: "Parisienne", cursive;
-  font-size: 1.4em;
+  font-size: 1.35em;
   vertical-align: middle;
 }
 
-.login-feature-list {
+.login-feature-list,
+.hero-features {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
   margin-top: 28px;
+  max-width: 720px;
 }
 
 .login-feature-pill {
-  padding: 12px 16px;
+  padding: 13px 18px;
   border: 1px solid rgba(148, 163, 184, 0.22);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: 0 14px 26px rgba(15, 23, 42, 0.06);
   color: #0f172a;
   font-family: "DM Sans", "Segoe UI", sans-serif;
   font-size: 0.98rem;
@@ -111,53 +183,431 @@
   backdrop-filter: blur(12px);
 }
 
+.login-proof-row {
+  display: grid;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.login-proof-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 16px 18px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.66);
+  box-shadow: 0 16px 28px rgba(15, 23, 42, 0.06);
+}
+
+.login-proof-card svg {
+  margin-top: 2px;
+  color: #2563eb;
+}
+
+.login-proof-card strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #0f172a;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.login-proof-card span {
+  color: #475569;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.96rem;
+  line-height: 1.6;
+}
+
 .login-form-panel {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.login-form-panel > div {
-  background: transparent;
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  margin-top: 26px;
 }
 
-.login-form-panel .MuiContainer-root,
-.login-form-panel .MuiBox-root {
-  max-width: none;
+.hero-cta__primary {
+  min-height: 50px !important;
+  padding: 0 26px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.25) !important;
+  color: #fff !important;
+  font-family: "DM Sans", "Segoe UI", sans-serif !important;
+  font-size: 0.98rem !important;
+  font-weight: 800 !important;
+  text-transform: none !important;
 }
 
-.login-form-panel .MuiCard-root {
-  border: 1px solid rgba(148, 163, 184, 0.22);
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.14);
+.hero-cta__secondary {
+  min-height: 50px !important;
+  padding: 0 26px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(37, 99, 235, 0.24) !important;
+  color: #1e3a8a !important;
+  font-family: "DM Sans", "Segoe UI", sans-serif !important;
+  font-size: 0.98rem !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+}
+
+.hero-cta__link {
+  padding: 0 6px !important;
+  font-family: "DM Sans", "Segoe UI", sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  color: #2563eb !important;
+}
+
+.preview-stack {
+  display: grid;
+  gap: 18px;
+  width: min(100%, 520px);
+}
+
+.preview-card {
+  border-radius: 26px;
+  padding: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background:
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 35%),
+    rgba(255, 255, 255, 0.9);
+  box-shadow: 0 22px 42px rgba(15, 23, 42, 0.12);
+}
+
+.preview-card--dashboard {
+  min-height: 200px;
+}
+
+.preview-card--timetable {
+  min-height: 240px;
+}
+
+.preview-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.preview-pill {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(219, 234, 254, 0.7);
+  color: #1d4ed8;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.preview-date {
+  color: #64748b;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.preview-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.preview-metric {
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  text-align: left;
+}
+
+.preview-metric span {
+  display: block;
+  color: #64748b;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.preview-metric strong {
+  color: #0f172a;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.preview-chart {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.preview-chart span {
+  display: block;
+  height: 54px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.2), rgba(37, 99, 235, 0.05));
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.preview-grid span {
+  display: block;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(219, 234, 254, 0.7);
+}
+
+.signin-card {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 470px);
+  margin: 0;
+  padding: 30px;
+  border: 1px solid rgba(191, 219, 254, 0.45);
+  border-radius: 34px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 255, 0.95));
+  box-shadow:
+    0 30px 60px rgba(15, 23, 42, 0.12),
+    0 10px 24px rgba(37, 99, 235, 0.08);
+  backdrop-filter: blur(20px);
+}
+
+.signin-card__topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.signin-card__badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(219, 234, 254, 0.82);
+  color: #1d4ed8;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.signin-card__price {
+  color: #64748b;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.signin-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.signin-card__title {
+  color: #0f172a;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 2.15rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.signin-card__copy {
+  margin-top: 6px;
+  color: #64748b;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.66;
+}
+
+.signin-card__feature-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.signin-card__mini-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 12px;
+  border-radius: 16px;
+  background: rgba(248, 250, 252, 0.96);
+  color: #334155;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.signin-card__mini-stat svg {
+  color: #2563eb;
+}
+
+.signin-card__form {
+  display: grid;
+  gap: 18px;
+}
+
+.signin-card__form .MuiOutlinedInput-root {
+  border-radius: 18px;
+  background: rgba(248, 250, 252, 0.96);
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.signin-card__form .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(148, 163, 184, 0.34);
+}
+
+.signin-card__form .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(37, 99, 235, 0.45);
+}
+
+.signin-card__form .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-width: 2px;
+  border-color: #2563eb;
+}
+
+.signin-card__form .MuiInputAdornment-root {
+  color: #94a3b8;
+}
+
+.signin-card__submit {
+  min-height: 58px !important;
+  margin-top: 8px !important;
+  border-radius: 18px !important;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  box-shadow: 0 18px 32px rgba(37, 99, 235, 0.24) !important;
+  color: #fff !important;
+  font-family: "DM Sans", "Segoe UI", sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  text-transform: none !important;
+}
+
+.signin-card__footer {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(226, 232, 240, 0.95);
+}
+
+.signin-card__footer-text,
+.register-footnote {
+  text-align: center;
+  color: #64748b;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.95rem;
+}
+
+.signin-card__footer-text--muted {
+  margin-top: 8px;
+  font-size: 0.88rem;
+}
+
+.register-footnote__link {
+  color: #1d4ed8;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.signin-dialog-paper {
+  border: 1px solid rgba(191, 219, 254, 0.32);
+  border-radius: 34px !important;
+  background:
+    radial-gradient(circle at top right, rgba(219, 234, 254, 0.72), transparent 28%),
+    rgba(255, 255, 255, 0.98) !important;
+  box-shadow: 0 34px 70px rgba(15, 23, 42, 0.2) !important;
   backdrop-filter: blur(18px);
 }
 
-.login-form-panel .MuiCardContent-root,
-.login-form-panel .MuiBox-root:has(form) {
-  padding: 32px;
+.signin-dialog-content {
+  padding: 0 !important;
 }
 
-.login-form-panel h1,
-.login-form-panel h2,
-.login-form-panel .MuiTypography-h5,
-.login-form-panel .MuiTypography-h4 {
+.signin-dialog-card {
+  padding: 24px;
+}
+
+.signin-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.signin-dialog-title {
   color: #0f172a;
   font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 1.45rem;
   font-weight: 800;
   letter-spacing: -0.03em;
 }
 
-.login-form-panel .MuiTypography-body1,
-.login-form-panel .MuiTypography-body2 {
+.register-form-card {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.14);
+  backdrop-filter: blur(18px);
+  padding: 32px;
+}
+
+.register-title {
+  margin-bottom: 8px;
+  color: #0f172a;
   font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.register-subtitle {
+  margin-bottom: 24px;
   color: #64748b;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
 }
 
-.login-form-panel .MuiTextField-root {
-  margin-bottom: 10px;
+.register-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap: 16px;
 }
 
-.login-form-panel .MuiOutlinedInput-root {
+.register-form-grid__full {
+  grid-column: 1 / -1;
+}
+
+.register-form-card .MuiOutlinedInput-root {
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.92);
   font-family: "DM Sans", "Segoe UI", sans-serif;
@@ -165,46 +615,224 @@
   font-weight: 600;
 }
 
-.login-form-panel .MuiOutlinedInput-notchedOutline {
+.register-form-card .MuiOutlinedInput-notchedOutline {
   border-color: rgba(148, 163, 184, 0.45);
 }
 
-.login-form-panel .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+.register-form-card .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
   border-color: rgba(37, 99, 235, 0.45);
 }
 
-.login-form-panel .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+.register-form-card .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
   border-width: 2px;
   border-color: #2563eb;
 }
 
-.login-form-panel .MuiButton-root {
-  min-height: 56px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  box-shadow: 0 18px 30px rgba(37, 99, 235, 0.28);
-  color: #ffffff;
-  font-family: "DM Sans", "Segoe UI", sans-serif;
-  font-size: 1rem;
-  font-weight: 800;
-  letter-spacing: 0.01em;
-  text-transform: none;
+.register-submit {
+  grid-column: 1 / -1;
+  min-height: 56px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  box-shadow: 0 18px 30px rgba(37, 99, 235, 0.28) !important;
+  color: #fff !important;
+  font-family: "DM Sans", "Segoe UI", sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  text-transform: none !important;
 }
 
-.login-form-panel .MuiButton-root:hover {
-  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+.register-feedback {
+  grid-column: 1 / -1;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+}
+
+.register-feedback--success {
+  border: 1px solid rgba(74, 222, 128, 0.36);
+  background: rgba(240, 253, 244, 0.9);
+  color: #166534;
+}
+
+.register-feedback--error {
+  border: 1px solid rgba(248, 113, 113, 0.32);
+  background: rgba(254, 242, 242, 0.95);
+  color: #b91c1c;
+}
+
+.pricing-shell {
+  min-height: 100vh;
+}
+
+.pricing-page {
+  position: relative;
+  z-index: 1;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 32px 48px 56px;
+}
+
+.pricing-hero {
+  max-width: 760px;
+  margin-bottom: 28px;
+}
+
+.pricing-kicker {
+  margin-bottom: 12px;
+  color: #2563eb;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.84rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pricing-title {
+  margin-bottom: 16px;
+  color: #0f172a;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: clamp(2.7rem, 4.6vw, 4.6rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.pricing-copy {
+  max-width: 720px;
+  color: #475569;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 1.12rem;
+  line-height: 1.75;
+}
+
+.pricing-copy strong {
+  color: #1d4ed8;
+  font-weight: 800;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.pricing-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 28px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent 28%),
+    rgba(255, 255, 255, 0.84);
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.1);
+  backdrop-filter: blur(18px);
+}
+
+.pricing-card--featured {
+  transform: translateY(-8px);
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: 0 30px 56px rgba(37, 99, 235, 0.18);
+}
+
+.pricing-card__badge {
+  display: inline-flex;
+  width: fit-content;
+  margin-bottom: 18px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(219, 234, 254, 0.9);
+  color: #1d4ed8;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.pricing-card__title {
+  color: #0f172a;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.pricing-card__priceRow {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  margin: 10px 0 24px;
+}
+
+.pricing-card__price {
+  color: #0f172a;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 2.7rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.pricing-card__period {
+  color: #64748b;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.pricing-card__features {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.pricing-card__feature {
+  color: #334155;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.pricing-card__feature::before {
+  content: "•";
+  margin-right: 10px;
+  color: #2563eb;
+}
+
+.pricing-card__button {
+  margin-top: auto !important;
+  min-height: 52px !important;
+  border-radius: 16px !important;
+  font-family: "DM Sans", "Segoe UI", sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  text-transform: none !important;
+}
+
+.pricing-card__button--featured {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  box-shadow: 0 18px 30px rgba(37, 99, 235, 0.28) !important;
 }
 
 @media (max-width: 1100px) {
-  .login-grid {
+  .public-topbar {
+    padding: 18px 20px 0;
+  }
+
+  .login-grid,
+  .login-grid--auth,
+  .login-grid--register {
     grid-template-columns: 1fr;
-    gap: 24px;
-    padding: 32px 20px;
+    gap: 28px;
+    min-height: auto;
+    padding: 20px 20px 32px;
   }
 
   .login-brand-panel {
-    padding: 16px 8px 0;
     text-align: center;
+    margin: 0 auto;
   }
 
   .login-title,
@@ -213,8 +841,27 @@
     margin-right: auto;
   }
 
-  .login-feature-list {
+  .login-feature-list,
+  .hero-features,
+  .login-proof-row {
     justify-content: center;
+  }
+
+  .preview-stack {
+    width: min(100%, 540px);
+    margin: 0 auto;
+  }
+
+  .pricing-page {
+    padding: 26px 20px 48px;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-card--featured {
+    transform: none;
   }
 }
 
@@ -225,6 +872,12 @@
       linear-gradient(180deg, #eff5ff 0%, #f8fbff 100%);
   }
 
+  .public-topbar {
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px 16px 0;
+  }
+
   .login-grid {
     padding: 20px 16px 28px;
   }
@@ -233,17 +886,21 @@
     padding: 8px 0 0;
   }
 
-  .login-kicker {
-    margin-bottom: 12px;
-    font-size: 11px;
+  .login-brand-script {
+    font-size: clamp(2.6rem, 14vw, 3.8rem);
+  }
+
+  .login-title {
+    font-size: clamp(2.5rem, 12vw, 3.6rem);
   }
 
   .login-copy {
     font-size: 1rem;
-    line-height: 1.6;
+    line-height: 1.62;
   }
 
-  .login-feature-list {
+  .login-feature-list,
+  .hero-features {
     gap: 10px;
   }
 
@@ -251,7 +908,47 @@
     font-size: 0.9rem;
   }
 
-  .login-form-panel .MuiCard-root {
+  .login-proof-row {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-cta {
+    justify-content: center;
+  }
+
+  .signin-card,
+  .register-form-card {
+    padding: 22px;
+    border-radius: 24px;
+  }
+
+  .signin-card__feature-strip,
+  .register-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-grid span {
+    height: 24px;
+  }
+
+  .register-form-grid__full {
+    grid-column: auto;
+  }
+
+  .pricing-page {
+    padding: 20px 16px 36px;
+  }
+
+  .pricing-card {
+    padding: 22px;
     border-radius: 22px;
+  }
+
+  .signin-dialog-card {
+    padding: 22px;
+  }
+
+  .signin-card__title {
+    font-size: 1.7rem;
   }
 }

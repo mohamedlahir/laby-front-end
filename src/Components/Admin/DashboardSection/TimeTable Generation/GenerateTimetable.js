@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { API_BASE } from "../../../../config/api";
 import { clearAuthStorage, isTokenExpired } from "../../../../utils/auth";
 import "./Timetable.css";
 
@@ -25,8 +26,8 @@ const GenerateTimetable = () => {
     }
 
     try {
-      const res = await axios.post(
-        `http://localhost:8080/scheduler/api/admin/timetable/generate`,
+    const res = await axios.post(
+  `${API_BASE}/scheduler/admin/timetable/generate`,
         null,
         {
           params: { schoolId, academicYearStart, academicYearEnd },
