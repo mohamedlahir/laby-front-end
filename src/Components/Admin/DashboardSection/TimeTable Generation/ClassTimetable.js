@@ -3,16 +3,17 @@ import axios from "axios";
 import "./Timetable.css";
 import { API_BASE } from "../../../../config/api";
 
-const days = [
+const defaultDays = [
   "MONDAY",
   "TUESDAY",
   "WEDNESDAY",
   "THURSDAY",
-  "FRIDAY"
+  "FRIDAY",
   // "SATURDAY",
 ];
 
-const periods = [1,2,3,4,5,6,7,8,9];
+// sensible default: up to 9 periods (used only when API doesn't provide period numbers)
+const defaultPeriods = [1, 2, 3, 4, 5, 6, 7, 8, 9,10];
 
 const formatAcademicYearLabel = (year, years) => {
   const today = new Date();
@@ -53,6 +54,9 @@ const ClassTimetable = () => {
   const [targetDate, setTargetDate] = useState("");
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
+  // dynamic state derived from fetched timetable
+  const [periodsState, setPeriodsState] = useState(defaultPeriods);
+  const [daysState, setDaysState] = useState(defaultDays);
 
   useEffect(() => {
     const fetchAcademicYears = async () => {
@@ -102,14 +106,64 @@ const ClassTimetable = () => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    setData(res.data);
+
+    const rows = Array.isArray(res.data) ? res.data : [];
+
+    // Derive unique period numbers (as numbers) from returned data and sort them.
+    const periodNums = Array.from(
+      new Set(
+        rows
+          .map((r) => {
+            // Normalize periodNumber to number when possible
+            const n = Number(r.periodNumber);
+            return Number.isNaN(n) ? null : n;
+          })
+          .filter((n) => n !== null)
+      )
+    ).sort((a, b) => a - b);
+
+    if (periodNums.length > 0) {
+      setPeriodsState(periodNums);
+    } else {
+      // fallback to sensible default
+      setPeriodsState(defaultPeriods);
+    }
+
+    // Derive unique days from returned data and order them by a canonical weekday order
+    const canonicalOrder = [
+      "MONDAY",
+      "TUESDAY",
+      "WEDNESDAY",
+      "THURSDAY",
+      "FRIDAY",
+      "SATURDAY",
+      "SUNDAY",
+    ];
+
+    const uniqueDays = Array.from(
+      new Set(rows.map((r) => (r.dayOfWeek ? String(r.dayOfWeek).toUpperCase() : r.dayOfWeek)))
+    ).filter(Boolean);
+
+    if (uniqueDays.length > 0) {
+      // keep canonical ordering where possible
+      const ordered = canonicalOrder.filter((d) => uniqueDays.includes(d));
+      // if API returned days that are outside canonical list, append them in their returned order
+      const extras = uniqueDays.filter((d) => !canonicalOrder.includes(d));
+      setDaysState([...ordered, ...extras]);
+    } else {
+      setDaysState(defaultDays);
+    }
+
+    setData(rows);
     setError("");
   };
 
   const getCell = (day, period) =>
-    data.find(
-      (d) => d.dayOfWeek === day && d.periodNumber === period
-    );
+    data.find((d) => {
+      const dDay = d.dayOfWeek ? String(d.dayOfWeek).toUpperCase() : d.dayOfWeek;
+      const pNum = d.periodNumber !== undefined ? Number(d.periodNumber) : d.periodNumber;
+      return dDay === day && pNum === period;
+    });
 
   return (
     <section className="timetable-card timetable-card--wide">
@@ -160,7 +214,7 @@ const ClassTimetable = () => {
           </select>
         </div>
         <div className="timetable-field">
-          <label>Target Date</label>
+          <label>Check substitution for date</label>
           <input
             type="date"
             value={targetDate}
@@ -177,14 +231,14 @@ const ClassTimetable = () => {
       {error ? <p className="timetable-feedback is-error">{error}</p> : null}
 
       <div className="timetable-shell">
-        <div className="timetable-shell__meta">
+          <div className="timetable-shell__meta">
           <div>
             <span className="meta-label">Displayed Days</span>
-            <strong>{days.length}</strong>
+            <strong>{daysState.length}</strong>
           </div>
           <div>
             <span className="meta-label">Periods Per Day</span>
-            <strong>{periods.length}</strong>
+            <strong>{periodsState.length}</strong>
           </div>
           <div>
             <span className="meta-label">Academic Year</span>
@@ -212,16 +266,16 @@ const ClassTimetable = () => {
             <thead>
               <tr>
                 <th>Day / Period</th>
-                {periods.map((p) => (
+                {periodsState.map((p) => (
                   <th key={p}>P{p}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {days.map((day) => (
+              {daysState.map((day) => (
                 <tr key={day}>
                   <td className="timetable-day"><b>{day}</b></td>
-                    {periods.map((p) => {
+                    {periodsState.map((p) => {
                     const cell = getCell(day, p);
                     let cellClass = "timetable-cell is-empty";
 

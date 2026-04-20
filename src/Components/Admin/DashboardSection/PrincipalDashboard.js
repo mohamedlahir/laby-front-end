@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState, useEffect } from "react";
 import {
   Alert,
   Box,
+  Collapse,
   Button,
   Card,
   CardContent,
@@ -19,12 +20,21 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TablePagination,
   Typography,
   Paper,
+  TextField,
+  Slider,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
+  Chip,
 } from "@mui/material";
 import { useColorScheme } from "@mui/material/styles";
 
-import { API_BASE } from "../../../config/api";
+import axios from "axios";
+// import { API_BASE } from "../../../config/api";
 
 function formatNumber(value) {
   if (value === null || value === undefined) return "—";
@@ -32,6 +42,9 @@ function formatNumber(value) {
   if (Number.isInteger(value)) return value.toString();
   return Number(value).toFixed(2);
 }
+
+// const apiUrl ="https://lahir.in/api";
+const apiUrl ="http://localhost:8080/api";
 
 function formatPercent(value) {
   if (value === null || value === undefined) return "—";
@@ -54,6 +67,14 @@ export default function PrincipalDashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState(null);
+  // search & filter state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [utilizationMin, setUtilizationMin] = useState(0);
+  const [assignedMin, setAssignedMin] = useState(0);
+  const [sortBy, setSortBy] = useState("utilizationDesc");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [filtersOpen, setFiltersOpen] = useState(true);
 
   useEffect(() => {
     const storedSchoolId = localStorage.getItem("schoolId");
@@ -64,6 +85,7 @@ export default function PrincipalDashboard() {
 
   const summary = overview?.summary;
   const teachers = overview?.teachers || [];
+  const teachersList = React.useMemo(() => overview?.teachers || [], [overview?.teachers]);
 
   const fetchCurrentAcademicYear = useCallback(async () => {
     const token = localStorage.getItem("token");
@@ -71,21 +93,15 @@ export default function PrincipalDashboard() {
       return null;
     }
 
-  const yearsUrl = new URL(`${API_BASE}/scheduler/admin/timetable/years`);
-    yearsUrl.searchParams.set("schoolId", schoolId);
-
-    const yearsResponse = await fetch(yearsUrl.toString(), {
+  // Use axios to fetch academic years (safer construction and param handling)
+    const yearsRes = await axios.get(apiUrl + "/scheduler/admin/timetable/years", {
+      params: { schoolId },
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
       },
     });
 
-    if (!yearsResponse.ok) {
-      throw new Error("Failed to load academic years");
-    }
-
-    const years = await yearsResponse.json();
+    const years = yearsRes?.data;
     if (!Array.isArray(years) || years.length === 0) {
       throw new Error("No academic years found for this school");
     }
@@ -128,45 +144,25 @@ export default function PrincipalDashboard() {
         throw new Error("Academic year is not available");
       }
 
-      const params = new URLSearchParams({
+      const qs = {
         schoolId: String(schoolId),
         academicYearStart: currentYear.academicYearStart,
         academicYearEnd: currentYear.academicYearEnd,
-      });
+      };
 
       const [summaryResponse, teachersResponse] = await Promise.all([
-        fetch(
-          `${API_BASE}/scheduler/principal/dashboard/summary?${params.toString()}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        ),
-        fetch(
-          `${API_BASE}/scheduler/principal/dashboard/teachers?${params.toString()}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        ),
+        axios.get(apiUrl + "/scheduler/principal/dashboard/summary", {
+          params: qs,
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        axios.get(apiUrl + "/scheduler/principal/dashboard/teachers", {
+          params: qs,
+          headers: { Authorization: `Bearer ${token}` },
+        }),
       ]);
 
-      if (!summaryResponse.ok) {
-        throw new Error("Failed to load dashboard summary");
-      }
-
-      if (!teachersResponse.ok) {
-        throw new Error("Failed to load teacher workloads");
-      }
-
-      const [summaryData, teachersData] = await Promise.all([
-        summaryResponse.json(),
-        teachersResponse.json(),
-      ]);
+      const summaryData = summaryResponse?.data;
+      const teachersData = teachersResponse?.data;
 
       setOverview({
         summary: summaryData,
@@ -210,6 +206,35 @@ export default function PrincipalDashboard() {
 
     return "";
   }, [academicYear, summary]);
+
+  const filteredTeachers = useMemo(() => {
+    if (!teachersList) return [];
+    const q = String(searchQuery || "").trim().toLowerCase();
+    let list = teachersList.filter((t) => {
+      if (q) {
+        const id = String(t.tutorId || "").toLowerCase();
+        const name = String(t.tutorName || "").toLowerCase();
+        if (!id.includes(q) && !name.includes(q)) return false;
+      }
+      if (typeof t.utilizationPercent === "number") {
+        if (t.utilizationPercent < utilizationMin) return false;
+      }
+      if (typeof t.assignedPeriods === "number") {
+        if (t.assignedPeriods < assignedMin) return false;
+      }
+      return true;
+    });
+
+    if (sortBy === "utilizationDesc") {
+      list.sort((a, b) => (b.utilizationPercent || 0) - (a.utilizationPercent || 0));
+    } else if (sortBy === "utilizationAsc") {
+      list.sort((a, b) => (a.utilizationPercent || 0) - (b.utilizationPercent || 0));
+    } else if (sortBy === "assignedDesc") {
+      list.sort((a, b) => (b.assignedPeriods || 0) - (a.assignedPeriods || 0));
+    }
+
+    return list;
+  }, [teachersList, searchQuery, utilizationMin, assignedMin, sortBy]);
 
   const subjectGradeMap = useMemo(() => {
     if (!selectedTeacher) return {};
@@ -388,6 +413,86 @@ export default function PrincipalDashboard() {
             </Typography>
           </Box>
 
+          {/* Search & sort (filters moved into column headers) */}
+          <Box sx={{ mb: 2, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+            <TextField
+              size="small"
+              placeholder="Search by tutor id or name"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{ minWidth: 260 }}
+            />
+
+            <FormControl size="small" sx={{ minWidth: 180 }}>
+              <InputLabel id="sort-by-label">Sort</InputLabel>
+              <Select
+                labelId="sort-by-label"
+                value={sortBy}
+                label="Sort"
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <MenuItem value="utilizationDesc">Utilization (high → low)</MenuItem>
+                <MenuItem value="utilizationAsc">Utilization (low → high)</MenuItem>
+                <MenuItem value="assignedDesc">Assigned Periods (high → low)</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Box sx={{ ml: 'auto', display: 'flex', gap: 1, alignItems: 'center' }}>
+              <Button variant="outlined" size="small" onClick={() => { setSearchQuery(''); setUtilizationMin(0); setAssignedMin(0); setSortBy('utilizationDesc'); setPage(0); }}>
+                Clear
+              </Button>
+              <Chip label={`${filteredTeachers.length} shown`} color="primary" />
+              <Button size="small" variant="text" onClick={() => setFiltersOpen((s) => !s)} sx={{ ml: 1 }}>
+                {filtersOpen ? 'Hide filters' : 'Show filters'}
+              </Button>
+            </Box>
+          </Box>
+
+          {/* Collapsible filter panel (sticky) */}
+          <Collapse in={filtersOpen} timeout={180} sx={{ mb: 2 }}>
+            <Box
+              sx={{
+                p: 2,
+                borderRadius: '12px',
+                border: isDarkMode ? '1px solid rgba(148,163,184,0.06)' : '1px solid rgba(14,165,233,0.08)',
+                backgroundColor: isDarkMode ? 'rgba(17,24,39,0.6)' : 'rgba(255,255,255,0.9)',
+                display: 'flex',
+                gap: 3,
+                alignItems: 'center',
+                position: 'sticky',
+                top: 120,
+                zIndex: 2,
+              }}
+            >
+              <Box sx={{ minWidth: 260 }}>
+                <Typography variant="caption" sx={{ color: isDarkMode ? '#cbd5e1' : '#475569' }}>Min utilization (%)</Typography>
+                <Slider
+                  value={utilizationMin}
+                  onChange={(_, v) => { setUtilizationMin(Array.isArray(v) ? v[0] : v); setPage(0); }}
+                  min={0}
+                  max={100}
+                  valueLabelDisplay="auto"
+                  size="small"
+                />
+              </Box>
+
+              <Box sx={{ minWidth: 160 }}>
+                <Typography variant="caption" sx={{ color: isDarkMode ? '#cbd5e1' : '#475569' }}>Min assigned periods</Typography>
+                <TextField
+                  size="small"
+                  type="number"
+                  value={assignedMin}
+                  onChange={(e) => { setAssignedMin(Number(e.target.value || 0)); setPage(0); }}
+                  sx={{ width: 140 }}
+                />
+              </Box>
+
+              <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
+                <Button size="small" onClick={() => { setAssignedMin(0); setUtilizationMin(0); setPage(0); }}>Reset filters</Button>
+              </Box>
+            </Box>
+          </Collapse>
+
           <TableContainer
             component={Paper}
             sx={{
@@ -400,42 +505,27 @@ export default function PrincipalDashboard() {
                 ? "0 22px 40px rgba(2, 6, 23, 0.28)"
                 : "0 22px 40px rgba(15, 23, 42, 0.08)",
               backgroundColor: isDarkMode ? "#111827" : "#ffffff",
+              maxHeight: '60vh',
             }}
           >
-            <Table size="small">
+            <Table size="small" stickyHeader>
               <TableHead
                 sx={{
-                  background:
-                    "linear-gradient(135deg, #2563eb, #1d4ed8)",
+                  background: isDarkMode ? "linear-gradient(135deg, #2563eb, #1d4ed8)" : "linear-gradient(135deg, rgba(226,232,240,0.8), rgba(255,255,255,1))",
                 }}
               >
                 <TableRow>
-                  {[
-                    "Tutor ID",
-                    "Tutor Name",
-                    "Assigned Periods",
-                    "Capacity",
-                    "Max Daily Hours",
-                    "Utilization",
-                    "Details",
-                  ].map((heading) => (
-                    <TableCell
-                      key={heading}
-                      sx={{
-                        color: "white",
-                        fontWeight: 800,
-                        letterSpacing: "0.03em",
-                        textTransform: "uppercase",
-                        fontSize: 12,
-                      }}
-                    >
-                      {heading}
-                    </TableCell>
-                  ))}
+                  <TableCell sx={{ color: "white", fontWeight: 800, letterSpacing: "0.03em", textTransform: "uppercase", fontSize: 12 }}>Tutor ID</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: 800, letterSpacing: "0.03em", textTransform: "uppercase", fontSize: 12 }}>Tutor Name</TableCell>
+                      <TableCell sx={{ color: "white", fontWeight: 800, letterSpacing: "0.03em", textTransform: "uppercase", fontSize: 12 }}>Assigned Periods</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: 800, letterSpacing: "0.03em", textTransform: "uppercase", fontSize: 12 }}>Capacity</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: 800, letterSpacing: "0.03em", textTransform: "uppercase", fontSize: 12 }}>Max Daily Hours</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: 800, letterSpacing: "0.03em", textTransform: "uppercase", fontSize: 12 }}>Utilization</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: 800, letterSpacing: "0.03em", textTransform: "uppercase", fontSize: 12 }}>Details</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {teachers.map((teacher, index) => (
+                {filteredTeachers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((teacher, index) => (
                   <TableRow
                     key={teacher.tutorId}
                     sx={{
@@ -484,6 +574,15 @@ export default function PrincipalDashboard() {
               </TableBody>
             </Table>
           </TableContainer>
+          <TablePagination
+            component="div"
+            count={filteredTeachers.length}
+            page={page}
+            onPageChange={(e, newPage) => setPage(newPage)}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={(e) => { setRowsPerPage(Number(e.target.value)); setPage(0); }}
+            rowsPerPageOptions={[5,10,20,50]}
+          />
         </>
       )}
 

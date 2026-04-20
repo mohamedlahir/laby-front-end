@@ -1,0 +1,9 @@
+services:
+  frontend:
+    image: mohamedlahir/laby-frontend:dev
+    container_name: laby-frontend
+    ports:
+      - "127.0.0.1:3000:80"
+    environment:
+      REACT_APP_API_BASE: "https://lahir.in"
+    restart: unless-stopped
