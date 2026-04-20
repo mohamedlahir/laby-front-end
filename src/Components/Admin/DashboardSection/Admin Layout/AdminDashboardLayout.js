@@ -27,6 +27,10 @@ import ApplyLeave from "../Tutor Management/ApplyLeave";
 import TutorDashboard from "../../../Teachers/TutorDashboard";
 import GenerateTimetable from "../TimeTable Generation/GenerateTimetable";
 import ClassTimetable from "../TimeTable Generation/ClassTimetable";
+import Conflicts from "../TimeTable Generation/Conflicts";
+import AllConflicts from "../TimeTable Generation/AllConflicts";
+import TutorConflicts from "../TimeTable Generation/TutorConflicts";
+import axios from "axios";
 
 /* ===================== NAVIGATION ===================== */
 
@@ -39,6 +43,8 @@ const NAVIGATION = [
     title: "Time Table Generation",
     icon: <BarChartOutlinedIcon />,
   },
+  { segment: "conflicts-all", title: "All Conflicts", icon: <EventNoteIcon /> },
+  { segment: "conflicts-tutor", title: "Tutor Conflicts", icon: <EventNoteIcon /> },
 ];
 
 /* ===================== THEME ===================== */
@@ -344,6 +350,46 @@ function DemoPageContent({ pathname, isDarkMode }) {
       </Box>
     );
   }
+  if (pathname === "/conflicts") {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          px: { xs: 1, md: 2 },
+          py: 1,
+        }}
+      >
+        <Conflicts />
+      </Box>
+    );
+  }
+  if (pathname === "/conflicts-all") {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          px: { xs: 1, md: 2 },
+          py: 1,
+        }}
+      >
+        <AllConflicts />
+      </Box>
+    );
+  }
+
+  if (pathname === "/conflicts-tutor") {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          px: { xs: 1, md: 2 },
+          py: 1,
+        }}
+      >
+        <TutorConflicts />
+      </Box>
+    );
+  }
   if (pathname === "/tutor-timetable") {
     return <TutorTimetable />;
   }
@@ -377,6 +423,29 @@ DemoPageContent.propTypes = {
 function AdminLayoutShell({ router }) {
   const { mode } = useColorScheme();
   const isDarkMode = mode === "dark";
+  const [sessionExpired, setSessionExpired] = React.useState(false);
+
+  React.useEffect(() => {
+    // register axios interceptor to catch 401 and show a session-expired modal
+    const id = axios.interceptors.response.use(
+      (res) => res,
+      (err) => {
+        try {
+          if (err && err.response && err.response.status === 401) {
+            clearAuthStorage();
+            setSessionExpired(true);
+          }
+        } catch (e) {
+          // ignore
+        }
+        return Promise.reject(err);
+      }
+    );
+
+    return () => {
+      axios.interceptors.response.eject(id);
+    };
+  }, []);
 
   return (
     <>
@@ -489,6 +558,29 @@ function AdminLayoutShell({ router }) {
         }}
       >
         <DemoPageContent pathname={router.pathname} isDarkMode={isDarkMode} />
+
+        {/* Session expired modal */}
+        {sessionExpired && (
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(2,6,23,0.6)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 2000,
+            }}
+          >
+            <div style={{ width: "min(520px, 94%)", background: isDarkMode ? "#0f172a" : "#fff", padding: 20, borderRadius: 12 }}>
+              <h3 style={{ marginTop: 0 }}>Session expired</h3>
+              <p>Your session has expired. Please login again to continue.</p>
+              <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                <Button variant="outlined" onClick={() => window.location.replace("/")}>Login</Button>
+              </div>
+            </div>
+          </div>
+        )}
       </DashboardLayout>
     </>
   );
@@ -508,6 +600,8 @@ function DashboardLayoutBranding(props) {
     "/timetable": "Time Table Generation",
     "/tutor-timetable": "Tutor Timetable",
     "/tutor-management": "Tutor Management",
+    "/conflicts-all": "All Conflicts",
+    "/conflicts-tutor": "Tutor Conflicts",
     "/orders": "Orders",
   };
   const currentTitle = pageTitleMap[router.pathname] || "Dashboard";
