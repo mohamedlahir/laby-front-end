@@ -213,8 +213,9 @@ export default function PrincipalDashboard() {
     let list = teachersList.filter((t) => {
       if (q) {
         const id = String(t.tutorId || "").toLowerCase();
+        const code = String(t.tutorCode || "").toLowerCase();
         const name = String(t.tutorName || "").toLowerCase();
-        if (!id.includes(q) && !name.includes(q)) return false;
+        if (!id.includes(q) && !code.includes(q) && !name.includes(q)) return false;
       }
       if (typeof t.utilizationPercent === "number") {
         if (t.utilizationPercent < utilizationMin) return false;
@@ -417,7 +418,7 @@ export default function PrincipalDashboard() {
           <Box sx={{ mb: 2, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
             <TextField
               size="small"
-              placeholder="Search by tutor id or name"
+              placeholder="Search by tutor code, id, or name"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               sx={{ minWidth: 260 }}
@@ -515,7 +516,7 @@ export default function PrincipalDashboard() {
                 }}
               >
                 <TableRow>
-                  <TableCell sx={{ color: "white", fontWeight: 800, letterSpacing: "0.03em", textTransform: "uppercase", fontSize: 12 }}>Tutor ID</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: 800, letterSpacing: "0.03em", textTransform: "uppercase", fontSize: 12 }}>Tutor Code</TableCell>
                   <TableCell sx={{ color: "white", fontWeight: 800, letterSpacing: "0.03em", textTransform: "uppercase", fontSize: 12 }}>Tutor Name</TableCell>
                       <TableCell sx={{ color: "white", fontWeight: 800, letterSpacing: "0.03em", textTransform: "uppercase", fontSize: 12 }}>Assigned Periods</TableCell>
                   <TableCell sx={{ color: "white", fontWeight: 800, letterSpacing: "0.03em", textTransform: "uppercase", fontSize: 12 }}>Capacity</TableCell>
@@ -545,7 +546,7 @@ export default function PrincipalDashboard() {
                       },
                     }}
                   >
-                    <TableCell>{teacher.tutorId}</TableCell>
+                    <TableCell>{teacher.tutorCode || teacher.tutorId}</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>{teacher.tutorName}</TableCell>
                     <TableCell>{teacher.assignedPeriods}</TableCell>
                     <TableCell>{teacher.capacity}</TableCell>
@@ -669,7 +670,7 @@ export default function PrincipalDashboard() {
                     fontWeight: 700,
                   }}
                 >
-                  {selectedTeacher.tutorId}
+                  {selectedTeacher.tutorCode || selectedTeacher.tutorId}
                 </Typography>
 
                 <Box

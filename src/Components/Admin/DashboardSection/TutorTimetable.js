@@ -17,7 +17,7 @@ const periods = [1, 2, 3, 4, 5, 6, 7, 8];
 const formatDay = (day) => day.charAt(0) + day.slice(1).toLowerCase();
 
 const TutorTimetable = () => {
-  const [tutorId, setTutorId] = useState("");
+  const [tutorCode, setTutorCode] = useState("");
   // accept academic year range instead of weeklyTimetableId
   const [academicYearStart, setAcademicYearStart] = useState("2026-06-01");
   const [academicYearEnd, setAcademicYearEnd] = useState("2027-03-31");
@@ -26,8 +26,8 @@ const TutorTimetable = () => {
   const [hasFetched, setHasFetched] = useState(false);
 
   const fetchTimetable = async () => {
-    if (!tutorId || !academicYearStart || !academicYearEnd) {
-      setError("Tutor ID and academic year start/end are required.");
+    if (!tutorCode || !academicYearStart || !academicYearEnd) {
+      setError("Tutor Code and academic year start/end are required.");
       return;
     }
 
@@ -35,7 +35,7 @@ const TutorTimetable = () => {
       setError("");
       setHasFetched(true);
       const res = await axios.get(`${API_BASE}/scheduler/tutor/timetable`, {
-        params: { tutorId, academicYearStart, academicYearEnd },
+        params: { tutorCode, academicYearStart, academicYearEnd },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -72,6 +72,11 @@ const TutorTimetable = () => {
     };
   }, [data]);
 
+  const activeTutorCode = useMemo(() => {
+    const firstWithTutor = data.find((entry) => entry?.tutorCode || entry?.tutorId);
+    return firstWithTutor?.tutorCode || tutorCode || "";
+  }, [data, tutorCode]);
+
   return (
     <section className="timetable-card timetable-card--wide">
       <div className="timetable-card__header">
@@ -87,13 +92,13 @@ const TutorTimetable = () => {
 
       <div className="timetable-form-grid timetable-form-grid--compact">
         <div className="timetable-field">
-          <label htmlFor="tutor-id">Tutor ID</label>
+          <label htmlFor="tutor-id">Tutor Code</label>
           <input
             id="tutor-id"
             type="text"
-            placeholder="Tutor ID"
-            value={tutorId}
-            onChange={(e) => setTutorId(e.target.value)}
+            placeholder="Tutor Code (e.g. T003)"
+            value={tutorCode}
+            onChange={(e) => setTutorCode(e.target.value)}
           />
         </div>
 
@@ -121,7 +126,7 @@ const TutorTimetable = () => {
           <label>Tutor Scope</label>
           <input
             type="text"
-            value={tutorId ? `Tutor ${tutorId}` : "Not selected"}
+            value={activeTutorCode ? `Tutor ${activeTutorCode}` : "Not selected"}
             readOnly
           />
         </div>
@@ -163,7 +168,7 @@ const TutorTimetable = () => {
           <div className="timetable-empty-state">
               <p className="timetable-empty-state__title">No tutor timetable loaded yet</p>
               <p className="timetable-empty-state__copy">
-                Enter a tutor ID and an academic year start/end above, then fetch the
+                Enter a tutor code and an academic year start/end above, then fetch the
                 schedule to populate the period grid.
               </p>
             </div>

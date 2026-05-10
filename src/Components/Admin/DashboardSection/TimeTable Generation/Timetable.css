@@ -339,8 +339,8 @@
   gap: 6px;
 }
 
-.timetable-entry .entry-subject {
-  color: #e6edf3;
+.timetable-cell.is-conflict .timetable-entry .entry-subject {
+  color: #0f172a;
   font-size: 12px;
   font-weight: 800;
 }
@@ -361,9 +361,9 @@
 }
 
 .timetable-entry .entry-tutor.missing {
-  background: rgba(255,255,255,0.06);
-  color: #cbd5e1;
-  border: 1px solid rgba(255,255,255,0.04);
+  background: rgba(15, 23, 42, 0.08);
+  color: #475569;
+  border: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .entry-badges {
@@ -373,8 +373,8 @@
 }
 
 .entry-class {
-  background: rgba(255,255,255,0.04);
-  color: #cbd5e1;
+  background: rgba(15, 23, 42, 0.08);
+  color: #475569;
   padding: 4px 8px;
   border-radius: 12px;
   font-size: 11px;
@@ -409,7 +409,7 @@
   box-shadow: 0 6px 12px rgba(0,0,0,0.28);
 }
 
-.cell-more { color: #94a3b8; font-size: 12px; margin-top: 6px }
+.cell-more { color: #475569; font-size: 12px; margin-top: 6px }
 
 .timetable-legend { display:flex; gap:12px; margin-top:14px; align-items:center }
 .legend-item { display:flex; gap:8px; align-items:center; color:#64748b; font-weight:700 }
@@ -629,6 +629,10 @@
   border-left: 4px solid rgba(249, 115, 22, 0.22);
 }
 
+[data-toolpad-color-scheme="dark"] .timetable-cell.is-conflict .timetable-entry .entry-subject {
+  color: #e6edf3;
+}
+
 [data-toolpad-color-scheme="dark"] .entry-subject {
   color: #f8fafc;
 }
@@ -636,6 +640,21 @@
 [data-toolpad-color-scheme="dark"] .entry-tutor {
   background: rgba(148, 163, 184, 0.16);
   color: #cbd5e1;
+}
+
+[data-toolpad-color-scheme="dark"] .timetable-entry .entry-tutor.missing {
+  background: rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-toolpad-color-scheme="dark"] .entry-class {
+  background: rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+}
+
+[data-toolpad-color-scheme="dark"] .cell-more {
+  color: #94a3b8;
 }
 
 [data-toolpad-color-scheme="dark"] .entry-empty {
@@ -678,5 +697,174 @@
 
   .timetable td {
     height: 70px;
+  }
+}
+
+.timetable-import-block {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px dashed rgba(148, 163, 184, 0.4);
+}
+
+.timetable-import-block__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.timetable-import-block__head h3,
+.timetable-import-result h3,
+.timetable-import-table-block h4 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.timetable-import-subtitle {
+  margin-top: 8px;
+  margin-bottom: 14px;
+}
+
+.timetable-sample-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(37, 99, 235, 0.24);
+  color: #1d4ed8;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  background: rgba(239, 246, 255, 0.9);
+}
+
+.timetable-sample-link:hover {
+  background: rgba(219, 234, 254, 0.9);
+}
+
+.timetable-form-grid--import {
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  align-items: end;
+}
+
+.timetable-form-grid--import .timetable-field--file {
+  grid-column: 1 / 3;
+}
+
+.timetable-form-grid--import .timetable-action {
+  grid-column: 3 / 4;
+}
+
+.timetable-form-grid--import .timetable-field--import-date {
+  min-width: 0;
+}
+
+.timetable-form-grid--classrooms {
+  grid-template-columns: minmax(260px, 1fr) auto;
+  align-items: end;
+}
+
+.timetable-field--file input[type="file"] {
+  min-height: 52px;
+  padding: 11px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.timetable-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+  box-shadow: none;
+  transform: none;
+}
+
+.timetable-import-result {
+  margin-top: 22px;
+}
+
+.timetable-shell__meta--import {
+  margin-top: 10px;
+}
+
+.timetable-import-table-block {
+  margin-top: 18px;
+}
+
+.timetable-import-table-block h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.timetable--simple {
+  min-width: 600px;
+}
+
+.timetable--simple td {
+  height: auto;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.timetable--simple td:nth-child(2) {
+  text-align: left;
+}
+
+.timetable--conflicts {
+  min-width: 920px;
+}
+
+[data-toolpad-color-scheme="dark"] .timetable-import-block {
+  border-top-color: rgba(71, 85, 105, 0.75);
+}
+
+[data-toolpad-color-scheme="dark"] .timetable-import-block__head h3,
+[data-toolpad-color-scheme="dark"] .timetable-import-result h3,
+[data-toolpad-color-scheme="dark"] .timetable-import-table-block h4 {
+  color: #e2e8f0;
+}
+
+[data-toolpad-color-scheme="dark"] .timetable-sample-link {
+  border-color: rgba(96, 165, 250, 0.28);
+  background: rgba(30, 41, 59, 0.9);
+  color: #bfdbfe;
+}
+
+[data-toolpad-color-scheme="dark"] .timetable-sample-link:hover {
+  background: rgba(30, 41, 59, 1);
+}
+
+[data-toolpad-color-scheme="dark"] .timetable-field--file input[type="file"] {
+  border: 1px solid rgba(71, 85, 105, 0.7);
+  background: rgba(15, 23, 42, 0.82);
+  color: #e2e8f0;
+}
+
+@media (max-width: 1200px) {
+  .timetable-form-grid--import {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+
+  .timetable-form-grid--import .timetable-field--file {
+    grid-column: 1 / -1;
+  }
+
+  .timetable-form-grid--import .timetable-action {
+    grid-column: 1 / -1;
+  }
+
+  .timetable-form-grid--classrooms {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .timetable-form-grid--import {
+    grid-template-columns: 1fr;
   }
 }
