@@ -39,7 +39,7 @@ const formatAcademicYearLabel = (year, years) => {
 
 const Conflicts = ({ mode = "all" }) => {
   const [schoolId, setSchoolId] = useState(localStorage.getItem("schoolId") || 1);
-  const [tutorId, setTutorId] = useState("");
+  const [tutorCode, setTutorCode] = useState("");
   const [academicYears, setAcademicYears] = useState([]);
   const [selectedAcademicYear, setSelectedAcademicYear] = useState("");
   const [conflicts, setConflicts] = useState([]);
@@ -134,8 +134,8 @@ const Conflicts = ({ mode = "all" }) => {
       setError("Select an academic year");
       return;
     }
-    if (!tutorId) {
-      setError("Enter a tutor ID to fetch tutor conflicts");
+    if (!tutorCode) {
+      setError("Enter a tutor code to fetch tutor conflicts");
       return;
     }
 
@@ -143,7 +143,7 @@ const Conflicts = ({ mode = "all" }) => {
     try {
       setError("");
       const res = await axios.get(`${API_BASE}/scheduler/admin/timetable/conflicts/tutor`, {
-        params: { schoolId, tutorId, academicYearStart, academicYearEnd },
+        params: { schoolId, tutorCode, academicYearStart, academicYearEnd },
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
@@ -165,6 +165,8 @@ const Conflicts = ({ mode = "all" }) => {
       const pNum = c.periodNumber !== undefined ? Number(c.periodNumber) : c.periodNumber;
       return dDay === day && pNum === period;
     });
+
+  const tutorDisplay = (entry) => entry?.tutorCode || entry?.tutorId || "—";
 
   const openCellModal = (day, period) => {
     const items = getCellConflicts(day, period);
@@ -194,8 +196,8 @@ const Conflicts = ({ mode = "all" }) => {
         </div>
         {mode === "tutor" && (
           <div className="timetable-field">
-            <label>Tutor ID</label>
-            <input type="text" placeholder="Tutor ID (e.g. T003)" value={tutorId} onChange={(e) => setTutorId(e.target.value)} />
+            <label>Tutor Code</label>
+            <input type="text" placeholder="Tutor Code (e.g. T003)" value={tutorCode} onChange={(e) => setTutorCode(e.target.value)} />
           </div>
         )}
         <div className="timetable-field">
@@ -277,7 +279,7 @@ const Conflicts = ({ mode = "all" }) => {
                                     <span className="entry-subject">{c.subjectName ?? "—"}</span>
                                     <div className="entry-badges">
                                       <span className="entry-class">Class: {c.classRoomId ?? "—"}</span>
-                                      <span className={`entry-tutor ${c.tutorId ? 'present' : 'missing'}`}>Tutor: {c.tutorId ?? "—"}</span>
+                                      <span className={`entry-tutor ${c.tutorId ? 'present' : 'missing'}`}>Tutor: {tutorDisplay(c)}</span>
                                     </div>
                                   </div>
                                 ))}
@@ -321,7 +323,7 @@ const Conflicts = ({ mode = "all" }) => {
                         <div className="modal-subject">{c.subjectName ?? '—'}</div>
                         <div className="modal-details">
                           <span>Class: {c.classRoomId ?? '—'}</span>
-                          <span> Tutor: {c.tutorId ?? '—'}</span>
+                          <span> Tutor: {tutorDisplay(c)}</span>
                           <span> Status: {c.status ?? '—'}</span>
                           <span> Reason: {c.conflictReason ?? '—'}</span>
                         </div>
@@ -340,7 +342,7 @@ const Conflicts = ({ mode = "all" }) => {
             <ul>
               {conflicts.map((c) => (
                 <li key={c.id}>
-                  <strong>{c.subjectName}</strong> — Class {c.classRoomId} — Day {c.dayOfWeek} — P{c.periodNumber} — Tutor {c.tutorId ?? "—"}
+                  <strong>{c.subjectName}</strong> — Class {c.classRoomId} — Day {c.dayOfWeek} — P{c.periodNumber} — Tutor {tutorDisplay(c)}
                 </li>
               ))}
             </ul>

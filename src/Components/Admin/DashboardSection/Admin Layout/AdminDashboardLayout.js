@@ -30,6 +30,7 @@ import ClassTimetable from "../TimeTable Generation/ClassTimetable";
 import Conflicts from "../TimeTable Generation/Conflicts";
 import AllConflicts from "../TimeTable Generation/AllConflicts";
 import TutorConflicts from "../TimeTable Generation/TutorConflicts";
+import ClassroomManagement from "../Setup/ClassroomManagement";
 import axios from "axios";
 
 /* ===================== NAVIGATION ===================== */
@@ -37,12 +38,11 @@ import axios from "axios";
 const NAVIGATION = [
   { segment: "dashboard", title: "Dashboard", icon: <DashboardIcon /> },
   { segment: "tutor-timetable", title: "Tutor Timetable", icon: <EventNoteIcon /> },
+  { segment: "class-timetable", title: "Class Timetable", icon: <EventNoteIcon /> },
   { segment: "tutor-management", title: "Tutor Management", icon: <ManageAccountsIcon /> },
-  {
-    segment: "timetable",
-    title: "Time Table Generation",
-    icon: <BarChartOutlinedIcon />,
-  },
+  { kind: "header", title: "Setup" },
+  { segment: "classroom-management", title: "Classroom Management", icon: <EventNoteIcon /> },
+  { segment: "timetable", title: "Time Table Setup", icon: <BarChartOutlinedIcon /> },
   { segment: "conflicts-all", title: "All Conflicts", icon: <EventNoteIcon /> },
   { segment: "conflicts-tutor", title: "Tutor Conflicts", icon: <EventNoteIcon /> },
 ];
@@ -342,10 +342,77 @@ function DemoPageContent({ pathname, isDarkMode }) {
           </Typography>
         </Box>
 
-        <GenerateTimetable />
+        <GenerateTimetable mode="both" />
 
         <Box sx={{ my: 4 }} />
-
+      </Box>
+    );
+  }
+  if (pathname === "/classroom-management") {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          px: { xs: 1, md: 2 },
+          py: 1,
+        }}
+      >
+        <ClassroomManagement />
+      </Box>
+    );
+  }
+  if (pathname === "/class-timetable") {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          px: { xs: 1, md: 2 },
+          py: 1,
+        }}
+      >
+        <Box
+          sx={{
+            mb: 3,
+            px: 3,
+            py: 3,
+            borderRadius: "24px",
+            background: isDarkMode
+              ? "radial-gradient(circle at 88% 22%, rgba(96,165,250,0.18), transparent 20%), linear-gradient(135deg, rgba(15,23,42,0.98), rgba(17,24,39,0.98) 48%, rgba(30,41,59,0.96))"
+              : "linear-gradient(135deg, rgba(37,99,235,0.12), rgba(14,165,233,0.06) 55%, rgba(255,255,255,0.96))",
+            border: isDarkMode
+              ? "1px solid rgba(96, 165, 250, 0.28)"
+              : "1px solid rgba(147, 197, 253, 0.35)",
+            boxShadow: isDarkMode
+              ? "0 24px 48px rgba(2, 6, 23, 0.45)"
+              : "0 20px 45px rgba(15, 23, 42, 0.08)",
+          }}
+        >
+          <Typography
+            variant="overline"
+            sx={{
+              display: "block",
+              color: isDarkMode ? "#60a5fa" : "#2563eb",
+              fontWeight: 800,
+              letterSpacing: "0.14em",
+              mb: 1,
+            }}
+          >
+            Setup Workspace
+          </Typography>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 800,
+              color: isDarkMode ? "#f8fafc" : "#0f172a",
+              mb: 1,
+            }}
+          >
+            Class Timetable
+          </Typography>
+          <Typography sx={{ color: isDarkMode ? "#cbd5e1" : "#475569", maxWidth: 760, lineHeight: 1.7 }}>
+            Review the full weekly schedule by class, subject, and assigned tutor.
+          </Typography>
+        </Box>
         <ClassTimetable />
       </Box>
     );
@@ -597,7 +664,9 @@ function DashboardLayoutBranding(props) {
   const pageTitleMap = {
     "/dashboard": "Dashboard",
     "/profile": "Profile",
-    "/timetable": "Time Table Generation",
+    "/classroom-management": "Classroom Management",
+    "/timetable": "Time Table Setup",
+    "/class-timetable": "Class Timetable",
     "/tutor-timetable": "Tutor Timetable",
     "/tutor-management": "Tutor Management",
     "/conflicts-all": "All Conflicts",

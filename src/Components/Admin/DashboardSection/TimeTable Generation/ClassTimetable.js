@@ -300,7 +300,7 @@ const ClassTimetable = () => {
                           ) : (
                             <div className="timetable-entry">
                               <span className="entry-subject">{cell.subjectName ?? "—"}</span>
-                              <span className="entry-tutor">{cell.tutorId ?? "—"}</span>
+                              <span className="entry-tutor">{cell.tutorName ?? "—"}</span>
                             </div>
                           )
                         ) : (

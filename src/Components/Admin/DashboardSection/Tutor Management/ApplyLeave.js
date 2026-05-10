@@ -15,7 +15,7 @@ import { API_BASE } from "../../../../config/api";
 export default function ApplyLeave() {
   const { mode } = useColorScheme();
   const isDarkMode = mode === "dark";
-  const [tutorId, setTutorId] = useState("");
+  const [tutorCode, setTutorCode] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,8 +26,8 @@ export default function ApplyLeave() {
     setError("");
     setSuccess("");
 
-    if (!tutorId) {
-      setError("Please enter a Tutor ID");
+    if (!tutorCode) {
+      setError("Please enter a Tutor Code");
       return;
     }
     if (!fromDate || !toDate) {
@@ -49,7 +49,7 @@ export default function ApplyLeave() {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ tutorId, fromDate, toDate }),
+        body: JSON.stringify({ tutorCode, fromDate, toDate }),
       });
 
       if (!res.ok) {
@@ -58,7 +58,7 @@ export default function ApplyLeave() {
       }
 
       setSuccess("Leave applied successfully");
-      setTutorId("");
+      setTutorCode("");
       setFromDate("");
       setToDate("");
     } catch (err) {
@@ -100,9 +100,9 @@ export default function ApplyLeave() {
 
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", alignItems: "center" }}>
           <TextField
-            label="Tutor ID"
-            value={tutorId}
-            onChange={(e) => setTutorId(e.target.value)}
+            label="Tutor Code"
+            value={tutorCode}
+            onChange={(e) => setTutorCode(e.target.value)}
             size="small"
             sx={{ minWidth: 200 }}
           />
